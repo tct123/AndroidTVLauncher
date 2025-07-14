@@ -3,6 +3,7 @@ package com.jacky.launcher.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -25,16 +26,16 @@ public class AppDataManage {
         Intent localIntent = new Intent("android.intent.action.MAIN");
         localIntent.addCategory("android.intent.category.LAUNCHER");
         List<ResolveInfo> localList = localPackageManager.queryIntentActivities(localIntent, 0);
-        ArrayList<AppModel> localArrayList = null;
+        ArrayList<AppModel> localArrayList;
         Iterator<ResolveInfo> localIterator = null;
         localArrayList = new ArrayList<>();
-        if (localList.size() != 0) {
+        if (!localList.isEmpty()) {
             localIterator = localList.iterator();
         }
         while (true) {
-            if (!localIterator.hasNext())
-                break;
-            ResolveInfo localResolveInfo = (ResolveInfo) localIterator.next();
+            assert localIterator != null;
+            if (!localIterator.hasNext()) break;
+            ResolveInfo localResolveInfo = localIterator.next();
             AppModel localAppBean = new AppModel();
             localAppBean.setIcon(localResolveInfo.activityInfo.loadIcon(localPackageManager));
             localAppBean.setName(localResolveInfo.activityInfo.loadLabel(localPackageManager).toString());
@@ -45,7 +46,8 @@ public class AppDataManage {
             PackageInfo mPackageInfo;
             try {
                 mPackageInfo = mContext.getPackageManager().getPackageInfo(pkgName, 0);
-                if ((mPackageInfo.applicationInfo.flags & mPackageInfo.applicationInfo.FLAG_SYSTEM) > 0) {// 系统预装
+                assert mPackageInfo.applicationInfo != null;
+                if ((mPackageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0) {// 系统预装
                     localAppBean.setSysApp(true);
                 }
             } catch (NameNotFoundException e) {
@@ -63,16 +65,12 @@ public class AppDataManage {
         Intent localIntent = new Intent("android.intent.action.MAIN");
         localIntent.addCategory("android.intent.category.LAUNCHER");
         List<ResolveInfo> localList = localPackageManager.queryIntentActivities(localIntent, 0);
-        ArrayList<AppModel> localArrayList = null;
-        Iterator<ResolveInfo> localIterator = null;
-        if (localList != null) {
-            localArrayList = new ArrayList<>();
-            localIterator = localList.iterator();
-        }
-        while (true) {
-            if (!localIterator.hasNext())
-                break;
-            ResolveInfo localResolveInfo = (ResolveInfo) localIterator.next();
+        ArrayList<AppModel> localArrayList;
+        Iterator<ResolveInfo> localIterator;
+        localArrayList = new ArrayList<>();
+        localIterator = localList.iterator();
+        while (localIterator.hasNext()) {
+            ResolveInfo localResolveInfo = localIterator.next();
             AppModel localAppBean = new AppModel();
             localAppBean.setIcon(localResolveInfo.activityInfo.loadIcon(localPackageManager));
             localAppBean.setName(localResolveInfo.activityInfo.loadLabel(localPackageManager).toString());
@@ -82,7 +80,8 @@ public class AppDataManage {
             PackageInfo mPackageInfo;
             try {
                 mPackageInfo = mContext.getPackageManager().getPackageInfo(pkgName, 0);
-                if ((mPackageInfo.applicationInfo.flags & mPackageInfo.applicationInfo.FLAG_SYSTEM) > 0) {// 系统预装
+                assert mPackageInfo.applicationInfo != null;
+                if ((mPackageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0) {// 系统预装
                     localAppBean.setSysApp(true);
                 } else {
                     localArrayList.add(localAppBean);
@@ -101,14 +100,10 @@ public class AppDataManage {
         List<ResolveInfo> localList = localPackageManager.queryIntentActivities(localIntent, 0);
         ArrayList<AppModel> localArrayList = null;
         Iterator<ResolveInfo> localIterator = null;
-        if (localList != null) {
-            localArrayList = new ArrayList<>();
-            localIterator = localList.iterator();
-        }
+        localArrayList = new ArrayList<>();
+        localIterator = localList.iterator();
 
-        while (true) {
-            if (!localIterator.hasNext())
-                break;
+        while (localIterator.hasNext()) {
             ResolveInfo localResolveInfo = localIterator.next();
             AppModel localAppBean = new AppModel();
             localAppBean.setIcon(localResolveInfo.activityInfo.loadIcon(localPackageManager));
@@ -119,9 +114,11 @@ public class AppDataManage {
             String permission = "android.permission.RECEIVE_BOOT_COMPLETED";
             try {
                 PackageInfo mPackageInfo = mContext.getPackageManager().getPackageInfo(pkgName, 0);
-                if ((PackageManager.PERMISSION_GRANTED == localPackageManager.checkPermission(permission, pkgName))
-                        && !((mPackageInfo.applicationInfo.flags & mPackageInfo.applicationInfo.FLAG_SYSTEM) > 0)) {
-                    localArrayList.add(localAppBean);
+                if ((PackageManager.PERMISSION_GRANTED == localPackageManager.checkPermission(permission, pkgName))) {
+                    assert mPackageInfo.applicationInfo != null;
+                    if (!((mPackageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0)) {
+                        localArrayList.add(localAppBean);
+                    }
                 }
             } catch (NameNotFoundException e) {
                 e.printStackTrace();

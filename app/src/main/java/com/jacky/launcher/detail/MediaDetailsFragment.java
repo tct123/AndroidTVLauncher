@@ -33,7 +33,6 @@ import com.jacky.launcher.video.VideoActivity;
  */
 public class MediaDetailsFragment extends DetailsFragment {
 
-    private ArrayObjectAdapter mRowsAdapter;
     private MediaModel mMediaModel;
     private Context mContext;
     private static final int ACTION_WATCH_TRAILER = 1;
@@ -80,7 +79,7 @@ public class MediaDetailsFragment extends DetailsFragment {
 
         selector.addClassPresenter(DetailsOverviewRow.class, rowPresenter);
         selector.addClassPresenter(ListRow.class, new ListRowPresenter());
-        mRowsAdapter = new ArrayObjectAdapter(selector);
+        ArrayObjectAdapter mRowsAdapter = new ArrayObjectAdapter(selector);
 
         final DetailsOverviewRow detailsOverview = new DetailsOverviewRow(mMediaModel);
 

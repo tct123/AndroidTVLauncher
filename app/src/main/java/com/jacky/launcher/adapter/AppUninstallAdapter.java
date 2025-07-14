@@ -45,9 +45,9 @@ public class AppUninstallAdapter extends BaseAdapter {
             holder = new Holder();
             convertView = LayoutInflater.from(context).inflate(
                     R.layout.item_app_uninstall, null);
-            holder.name = (TextView) convertView
+            holder.name = convertView
                     .findViewById(R.id.item_app_uninstall_name);
-            holder.icon = (ImageView) convertView
+            holder.icon = convertView
                     .findViewById(R.id.item_app_uninstall_iv);
             convertView.setTag(holder);
         } else {
@@ -59,7 +59,7 @@ public class AppUninstallAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private class Holder {
+    private static class Holder {
         private TextView name;
         private ImageView icon;
     }

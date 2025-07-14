@@ -1,11 +1,5 @@
 package com.jacky.launcher.detail;
 
-/**
- * @author jacky
- * @version v1.0
- * @since 16/8/28
- */
-
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 
 public class MediaDetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {

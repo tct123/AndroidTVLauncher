@@ -18,6 +18,7 @@ import com.jacky.launcher.adapter.AppUninstallAdapter;
 import com.jacky.launcher.util.Tools;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 应用卸载类
@@ -27,7 +28,6 @@ import java.util.List;
  */
 public class AppUninstall extends Activity implements View.OnClickListener {
 
-    private ListView listView;
     private AppUninstallAdapter adapter;
     private List<AppModel> mAppList;
     private Context context;
@@ -42,19 +42,16 @@ public class AppUninstall extends Activity implements View.OnClickListener {
     }
 
     private void init() {
-        listView = (ListView) findViewById(R.id.app_uninstall_lv);
+        ListView listView = findViewById(R.id.app_uninstall_lv);
         AppDataManage getAppInstance = new AppDataManage(context);
         mAppList = getAppInstance.getUninstallAppList();
         adapter = new AppUninstallAdapter(context, mAppList);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Uri packageURI = Uri.parse("package:" + mAppList.get(position).getPackageName());
-                Intent uninstallIntent = new Intent(Intent.ACTION_DELETE,
-                        packageURI);
-                context.startActivity(uninstallIntent);
-            }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Uri packageURI = Uri.parse("package:" + mAppList.get(position).getPackageName());
+            Intent uninstallIntent = new Intent(Intent.ACTION_DELETE,
+                    packageURI);
+            context.startActivity(uninstallIntent);
         });
     }
 
@@ -102,7 +99,7 @@ public class AppUninstall extends Activity implements View.OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             //接收安装广播
-            if (intent.getAction().equals("android.intent.action.PACKAGE_ADDED")) {
+            if (Objects.equals(intent.getAction(), "android.intent.action.PACKAGE_ADDED")) {
 
                 String packageName = intent.getDataString();
                 List<ResolveInfo> list = Tools.findActivitiesForPackage(context, packageName);
@@ -117,8 +114,9 @@ public class AppUninstall extends Activity implements View.OnClickListener {
                 mAppList.add(localAppBean);
             }
             //接收卸载广播
-            if (intent.getAction().equals("android.intent.action.PACKAGE_REMOVED")) {
+            if (Objects.equals(intent.getAction(), "android.intent.action.PACKAGE_REMOVED")) {
                 String receiverName = intent.getDataString();
+                assert receiverName != null;
                 receiverName = receiverName.substring(8);
                 AppModel appBean;
                 for (int i = 0; i < mAppList.size(); i++) {

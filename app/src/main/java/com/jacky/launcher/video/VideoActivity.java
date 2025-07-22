@@ -25,7 +25,7 @@ public class VideoActivity extends Activity {
         JCVideoPlayer.TOOL_BAR_EXIST = false;
         JCVideoPlayer.ACTION_BAR_EXIST = false;
 
-        jcVideoPlayerStandard = (JCVideoPlayerStandard) findViewById(R.id.video_player);
+        jcVideoPlayerStandard = findViewById(R.id.video_player);
 
         jcVideoPlayerStandard.setUp(mMediaModel.getVideoUrl()
                 , JCVideoPlayerStandard.SCREEN_LAYOUT_LIST, mMediaModel.getTitle());

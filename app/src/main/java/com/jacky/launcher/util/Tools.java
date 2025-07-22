@@ -39,9 +39,9 @@ public final class Tools {
     }
 
     public static String byteArrayToHexString(byte[] b) {
-        StringBuffer resultSb = new StringBuffer();
-        for (int i = 0; i < b.length; i++) {
-            resultSb.append(byteToHexString(b[i]));
+        StringBuilder resultSb = new StringBuilder();
+        for (byte value : b) {
+            resultSb.append(byteToHexString(value));
         }
         return resultSb.toString();
     }
@@ -56,8 +56,6 @@ public final class Tools {
     }
 
     /**
-     * @param mobiles
-     * @return
      */
     public static boolean isMobileNO(String mobiles) {
         Pattern p = Pattern
@@ -68,9 +66,6 @@ public final class Tools {
     }
 
     /**
-     * @param expression
-     * @param text
-     * @return
      */
     private static boolean matchingText(String expression, String text) {
         Pattern p = Pattern.compile(expression);
@@ -79,8 +74,6 @@ public final class Tools {
     }
 
     /**
-     * @param zipcode
-     * @return
      */
     public static boolean isZipcode(String zipcode) {
         Pattern p = Pattern.compile("[0-9]\\d{5}");
